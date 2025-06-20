@@ -1,11 +1,11 @@
 services:
   - type: web
     name: student-management-system
-    env: docker
-    plan: free
-    repo: https://github.com/SHUFFYCODE/student_management_system
-    branch: main
-    dockerfilePath: Dockerfile
-    buildCommand: ""
-    startCommand: ""
-    autodeploy: true
+    runtime: php
+    buildCommand: composer install
+    startCommand: php spark serve --host 0.0.0.0 --port $PORT
+    envVars:
+      - key: CI_ENVIRONMENT
+        value: production
+
+
