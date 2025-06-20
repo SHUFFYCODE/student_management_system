@@ -1,14 +1,12 @@
 services:
   - type: web
     name: student-management-system
-    env: docker
+    env: php
+    envVersion: 8.1
     plan: free
-    repo: https://github.com/SHUFFYCODE/student_management_system
+    buildCommand: composer install
+    startCommand: php -S 0.0.0.0:8000 -t public
     branch: main
-    dockerfilePath: Dockerfile
-    rootDir: .
-    envVars:
-      - key: CI_ENVIRONMENT
-        value: production
+    autoDeploy: true
 
 
