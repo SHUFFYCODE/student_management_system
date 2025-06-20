@@ -1,15 +1,14 @@
 services:
   - type: web
-    name: codeigniter-app
+    name: student-management-system
     env: docker
+    plan: free
     repo: https://github.com/SHUFFYCODE/student_management_system
     branch: main
-    dockerfilePath: ./Dockerfile
-    plan: free
+    dockerfilePath: Dockerfile
+    rootDir: .
     envVars:
       - key: CI_ENVIRONMENT
         value: production
-      - key: APP_BASEURL
-        value: https://codeigniter-app.onrender.com/
 
 
