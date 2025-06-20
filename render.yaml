@@ -1,10 +1,11 @@
 services:
   - type: web
     name: student-management-system
-    env: php
+    env: docker
     plan: free
+    repo: https://github.com/SHUFFYCODE/student_management_system
+    branch: main
+    dockerfilePath: Dockerfile
     buildCommand: ""
     startCommand: ""
-    rootDir: public
-
-
+    autodeploy: true
