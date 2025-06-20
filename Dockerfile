@@ -1,39 +1,42 @@
+# Use official PHP 8.1 Apache image
 FROM php:8.1-apache
-
-
-# Install dependencies
-RUN apt-get update && apt-get install -y \
-    git curl unzip zip libzip-dev libpng-dev libonig-dev libxml2-dev \
-    && docker-php-ext-install pdo_mysql zip
 
 
 # Enable Apache mod_rewrite
 RUN a2enmod rewrite
 
 
-# Install Composer
-COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
-
-
-# Set working directory
+# Set working directory inside container
 WORKDIR /var/www/html
 
 
-# Copy project files
-COPY . .
+# Install system dependencies and Composer
+RUN apt-get update && \
+    apt-get install -y unzip git curl && \
+    curl -sS https://getcomposer.org/installer | php && \
+    mv composer.phar /usr/local/bin/composer
 
 
-# Allow composer to run as root
-ENV COMPOSER_ALLOW_SUPERUSER=1
+# Copy application source code
+COPY . /var/www/html
 
 
-# Install PHP dependencies (with verbose logging if it fails)
-RUN composer install --no-scripts --no-plugins --no-interaction --verbose || cat /tmp/composer.log || true
+# Fix folder permissions
+RUN chown -R www-data:www-data /var/www/html && \
+    chmod -R 755 /var/www/html
 
 
-# Set file permissions
-RUN chown -R www-data:www-data /var/www/html \
-    && chmod -R 755 /var/www/html
+# Set Apache to serve from /public
+RUN sed -i 's|/var/www/html|/var/www/html/public|g' /etc/apache2/sites-available/000-default.conf
 
 
+# Install PHP dependencies
+RUN composer install --no-interaction --prefer-dist --optimize-autoloader
+
+
+# Expose port 80
 EXPOSE 80
+
+
+# Start Apache in foreground
+CMD ["apache2-foreground"]
