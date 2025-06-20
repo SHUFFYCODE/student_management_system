@@ -1,0 +1,10 @@
+services:
+  - type: web
+    name: student-management-system
+    env: php
+    plan: free
+    buildCommand: ""
+    startCommand: ""
+    rootDir: public
+
+
