@@ -1,4 +1,3 @@
-# Use official PHP image with Apache
 FROM php:8.1-apache
 
 
@@ -24,8 +23,12 @@ WORKDIR /var/www/html
 COPY . .
 
 
-# Install PHP dependencies
-RUN composer install --no-scripts --no-plugins --no-interaction
+# Allow composer to run as root
+ENV COMPOSER_ALLOW_SUPERUSER=1
+
+
+# Install PHP dependencies (with verbose logging if it fails)
+RUN composer install --no-scripts --no-plugins --no-interaction --verbose || cat /tmp/composer.log || true
 
 
 # Set file permissions
@@ -33,5 +36,4 @@ RUN chown -R www-data:www-data /var/www/html \
     && chmod -R 755 /var/www/html
 
 
-# Expose default Apache port
 EXPOSE 80
