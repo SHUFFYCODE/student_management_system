@@ -25,11 +25,23 @@ class StudentController extends Controller
     }
 
 
-    public function index()
-    {
-        $data['students'] = $this->studentModel->findAll();
-        return view('students/index', $data);
+   public function index()
+{
+    $search = $this->request->getGet('search');
+
+
+    if (!empty($search)) {
+        $students = $this->studentModel->searchStudents($search);
+    } else {
+        $students = $this->studentModel->findAll();
     }
+
+
+    return view('students/index', [
+        'students' => $students,
+        'search' => $search
+    ]);
+}
 
 
     public function create()
@@ -44,34 +56,45 @@ class StudentController extends Controller
 
 
     public function store()
-    {
-        if (session()->get('role') !== 'admin') {
-            return redirect()->to('/students')->with('error', 'Access denied.');
-        }
-
-
-        $this->studentModel->save([
-            'student_id' => $this->request->getPost('student_id'),
-            'name'       => $this->request->getPost('name'),
-            'age'        => $this->request->getPost('age'),
-            'course'     => $this->request->getPost('course'),
-        ]);
-
-
-        return redirect()->to('/students')->with('success', 'Student added successfully.');
+{
+    if (session()->get('role') !== 'admin') {
+        return redirect()->to('/students')->with('error', 'Access denied.');
     }
 
 
-    public function edit($id)
-    {
-        if (session()->get('role') !== 'admin') {
-            return redirect()->to('/students')->with('error', 'Access denied.');
+    $imageFile = $this->request->getFile('image');
+    $imageName = null;
+
+
+    if ($imageFile && $imageFile->isValid() && !$imageFile->hasMoved()) {
+        if ($imageFile->getSize() > 2 * 1024 * 1024) {
+            return redirect()->back()->with('error', 'Please upload images 2MB or smaller');
         }
 
 
-        $data['student'] = $this->studentModel->find($id);
-        return view('students/edit', $data);
+        $imageName = $imageFile->getRandomName();
+
+
+        if (!is_dir(FCPATH . 'uploads')) {
+            mkdir(FCPATH . 'uploads', 0777, true);
+        }
+
+
+        $imageFile->move(FCPATH . 'uploads', $imageName);
     }
+
+
+    $this->studentModel->save([
+        'student_id' => $this->request->getPost('student_id'),
+        'name'       => $this->request->getPost('name'),
+        'age'        => $this->request->getPost('age'),
+        'course'     => $this->request->getPost('course'),
+        'image'      => $imageName, 
+    ]);
+
+
+    return redirect()->to('/students')->with('success', 'Student added successfully.');
+}
 
 
     public function update($id)
@@ -86,6 +109,11 @@ class StudentController extends Controller
 
 
         if ($imageFile && $imageFile->isValid() && !$imageFile->hasMoved()) {
+            if ($imageFile->getSize() > 2 * 1024 * 1024) {
+                return redirect()->back()->with('error', 'Please put images that are 2MB or lower');
+            }
+
+
             $imageName = $imageFile->getRandomName();
 
 
@@ -145,5 +173,3 @@ class StudentController extends Controller
         return view('students/read', $data);
     }
 }
-
-

@@ -14,6 +14,14 @@ class StudentModel extends Model
     protected $allowedFields = ['student_id', 'name', 'age', 'course', 'image'];
     protected $useAutoIncrement = false;
     protected $returnType = 'array';    
+
+
+    public function searchStudents($term)
+    {
+        return $this->like('name', $term)
+                    ->orLike('student_id', $term)
+                    ->findAll();
+    }
 }
 
 
