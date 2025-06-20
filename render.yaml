@@ -1,11 +1,15 @@
 services:
   - type: web
-    name: student-management-system
-    runtime: php
-    buildCommand: composer install
-    startCommand: php spark serve --host 0.0.0.0 --port $PORT
+    name: codeigniter-app
+    env: docker
+    repo: https://github.com/SHUFFYCODE/student_management_system
+    branch: main
+    dockerfilePath: ./Dockerfile
+    plan: free
     envVars:
       - key: CI_ENVIRONMENT
         value: production
+      - key: APP_BASEURL
+        value: https://codeigniter-app.onrender.com/
 
 
