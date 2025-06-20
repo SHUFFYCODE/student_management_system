@@ -1,71 +1,96 @@
-# CodeIgniter 4 Application Starter
+# Student Management System – CodeIgniter 4
 
-## What is CodeIgniter?
+This is a full-featured web-based Student Management System built using CodeIgniter 4 and MySQL. It allows admins to manage student records, upload student images, monitor attendance and grades, and perform secure login/logout with role-based access. The system includes validation, search/filter functionality, and supports local or Docker-based deployment.
 
-CodeIgniter is a PHP full-stack web framework that is light, fast, flexible and secure.
-More information can be found at the [official site](https://codeigniter.com).
+## Features
 
-This repository holds a composer-installable app starter.
-It has been built from the
-[development repository](https://github.com/codeigniter4/CodeIgniter4).
+- User Registration and Login
+- Admin/User Role-based Access
+- Create, Read, Update, Delete (CRUD) for Students
+- Upload and display student images
+- Grade and attendance management
+- Search and filter students
+- Input validation and CSRF protection
+- Password hashing
+- Deployed via localhost or Docker
 
-More information about the plans for version 4 can be found in [CodeIgniter 4](https://forum.codeigniter.com/forumdisplay.php?fid=28) on the forums.
+## Technologies Used
 
-You can read the [user guide](https://codeigniter.com/user_guide/)
-corresponding to the latest version of the framework.
+- PHP (CodeIgniter 4 Framework)
+- MySQL Database
+- Bootstrap 5
+- HTML, CSS, JavaScript
+- Apache Server (XAMPP or Docker)
+- Composer (Dependency Management)
 
-## Installation & updates
+## Installation
 
-`composer create-project codeigniter4/appstarter` then `composer update` whenever
-there is a new release of the framework.
+Clone the repository and navigate into it:
+`git clone https://github.com/yourusername/student_management_system.git && cd student_management_system`
 
-When updating, check the release notes to see if there are any changes you might need to apply
-to your `app` folder. The affected files can be copied or merged from
-`vendor/codeigniter4/framework/app`.
+Install dependencies:
+`composer install`
 
-## Setup
+Copy `.env` file and configure:
+- Set `app.baseURL = 'http://localhost:8080/student_management_system/'`
+- Set database credentials (username, password, database)
 
-Copy `env` to `.env` and tailor for your app, specifically the baseURL
-and any database settings.
+Create database `student_db` and import `student_db.sql` from the project.
 
-## Important Change with index.php
+Run development server:
+`php spark serve`
 
-`index.php` is no longer in the root of the project! It has been moved inside the *public* folder,
-for better security and separation of components.
+Visit: [http://localhost:8080](http://localhost:8080)
 
-This means that you should configure your web server to "point" to your project's *public* folder, and
-not to the project root. A better practice would be to configure a virtual host to point there. A poor practice would be to point your web server to the project root and expect to enter *public/...*, as the rest of your logic and the
-framework are exposed.
+## Default Login Credentials
 
-**Please** read the user guide for a better explanation of how CI4 works!
+• Admin: admin@example.com / admin123  
 
-## Repository Management
+## Project Structure
 
-We use GitHub issues, in our main repository, to track **BUGS** and to track approved **DEVELOPMENT** work packages.
-We use our [forum](http://forum.codeigniter.com) to provide SUPPORT and to discuss
-FEATURE REQUESTS.
+- `/app` – Application logic (Controllers, Models, Views)
+- `/public` – Front-facing directory (index.php, assets)
+- `/app/Controllers` – Handles routing and logic
+- `/app/Models` – Interfaces with the database
+- `/app/Views` – Blade-style HTML templates for UI
+- `/writable` – Logs, uploads, and cache files
 
-This repository is a "distribution" one, built by our release preparation script.
-Problems with it can be raised on our forum, or as issues in the main repository.
+## Docker Deployment (Optional)
+
+If you want to run using Docker:
+
+Ensure Docker and Docker Compose are installed. Use the provided `docker-compose.yml`:
+
+`docker-compose up --build`
+
+Access the system at: [http://localhost:8080](http://localhost:8080)
+
+## Challenges Encountered and Lessons Learned
+
+- Implementing secure authentication with hashed passwords and session control taught careful session handling and validation.
+- Uploading and displaying student images introduced file handling, path management, and conditional display logic.
+- Role-based access required structuring middleware-like conditions and views that respond to user permissions.
+- Encountered database errors due to mismatched table fields which reinforced the importance of syncing models with migrations.
+- Managing view logic for attendance and grades expanded understanding of modular controllers and relational database design.
+- Docker deployment helped understand environment configuration differences and portability.
+- Finally, integrating search and filter functionality required building dynamic queries and improving UI responsiveness.
 
 ## Server Requirements
 
-PHP version 8.1 or higher is required, with the following extensions installed:
+- PHP version 8.1 or higher
+- MySQL
+- Apache Server
+- Composer
 
-- [intl](http://php.net/manual/en/intl.requirements.php)
-- [mbstring](http://php.net/manual/en/mbstring.installation.php)
+Required PHP extensions:
+- intl
+- mbstring
+- json
+- curl
+- mysqlnd
 
-> [!WARNING]
-> - The end of life date for PHP 7.4 was November 28, 2022.
-> - The end of life date for PHP 8.0 was November 26, 2023.
-> - If you are still using PHP 7.4 or 8.0, you should upgrade immediately.
-> - The end of life date for PHP 8.1 will be December 31, 2025.
+## License
 
-Additionally, make sure that the following extensions are enabled in your PHP:
+This project is open-source and free to use under the MIT License.
 
-- json (enabled by default - don't turn it off)
-- [mysqlnd](http://php.net/manual/en/mysqlnd.install.php) if you plan to use MySQL
-- [libcurl](http://php.net/manual/en/curl.requirements.php) if you plan to use the HTTP\CURLRequest library
-"# student_management_system" 
-"# student_management_system" 
 "# student_management_system" 
